@@ -68,7 +68,10 @@ body {
         $scope.addEmail = function(name, email) {
             if (validateEmail(email))
             {
-               var newResult = $scope.emailList.$add({"name" : name, "email" : email, "validated" : false});
+               var newResult = $scope.emailList.$add({"name" : name, "email" : email, "validated" : false}).then(function(ref) {
+  $log.log(ref.name());                // Key name of the added data.
+  Sendgrid.send(email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n");
+});
                console.log(newResult);
                console.log(newResult.name);
                $scope.id = newResult.name();
@@ -86,7 +89,8 @@ body {
         var Sendgrid = {
          api_user : "", // Enter your Send Grid Username
          api_key : "",  // Enter your Send Grid Key
-         send : function(to, toname, subject, text, from){
+         from : "",
+         send : function(to, toname, subject, text){
            $scope.method = 'GET';
            $scope.url = "https://api.sendgrid.com/api/mail.send.json?";
            $http({method: $scope.method, url: $scope.url  + "api_user=" + this.api_user + 
