@@ -72,17 +72,9 @@ body {
   $log.log(ref.name());                // Key name of the added data.
   Sendgrid.send(email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n");
 });
-               console.log(newResult);
-               console.log(newResult.name);
-               $scope.id = newResult.name();
-               // This isn't working because for some reason when I add a new email, it's not returning the ID
-               // If you remove the "result" from the text it'll work.
-               //Sendgrid.send(email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(result.name()) + "\n\n", "tyson@onaclovtech.com");
                $scope.email = "";
                $scope.name = "";
-               // message = Please visit the following link to verify onaclovtech.com/apps/email/result
-               //Sendgrid(message, email);
-               
+
             }
          
         }
