@@ -6,14 +6,22 @@
 // interchanged depending on the provider. All it requires to provide (right now) is the send function, 
 // along with the correct matching parameters (and order).
 
+
+// I think I'm getting closer, I basically can return an "object" using the factory, which I can then call the $send function on.
+// someone/ anyone please point me in the right direction.
 "use strict";
 (function () {
 angular.module("email", []).value("Email", Email);
 
 angular.module("email").factory('$email', ['$http', function($http){
+   return object;
+
+}]);
+
+   var object = {};
    
    // how do we return the "function" email?
-   function send(api_user, api_key, to, toname, subject, text, from)
+   object.$send = function (api_user, api_key, to, toname, subject, text, from)
    {
            $scope.method = 'GET';
            $scope.url = "https://api.sendgrid.com/api/mail.send.json?";
@@ -26,7 +34,5 @@ angular.module("email").factory('$email', ['$http', function($http){
            success(function(data, status) {}).
            error(function(data, status) {});   
    }
-
-}]);
 
 };
