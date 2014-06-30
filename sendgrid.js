@@ -13,44 +13,20 @@
 // This guy should be returning promises of when it successfully send/fails emails.
 //      License: MIT
 
-"use strict";
-
-(function() {
-
-  var EmailApp, Email;
-
-  angular.module("email", []).value("Email", Email);
-
-  angular.module("email").factory("$email", ["$http", function($http) {
-      return function(ref) {
-        var em = new Email($http, ref);
-        return em.construct();
-      };
+  angular.module('email', []).factory('$email', ['$http', function($http) {
+      return { $send : function (api_user, api_key, to, toname, subject, text, from)
+                  {
+                          $scope.method = 'GET';
+                          $scope.url = "https://api.sendgrid.com/api/mail.send.json?";
+                          $http({method: $scope.method, url: $scope.url  + "api_user=" + api_user + 
+                                                                           "&api_key=" + api_key + 
+                                                                           "&to=" + to +
+                                                                           "&subject=" + subject + 
+                                                                           "&text=" + text + 
+                                                                           "&from=" + from}).
+                          success(function(data, status) {}).
+                          error(function(data, status) {});   
+                  }
+            };
     }
   ]);
-  EmailApp = function ($http, ref) {
-     this._http = $http;
-     this._eRef = ref;
-  };
-
-  EmailApp.prototype = {
-      construct : function() {
-        var self = this;
-        var object = {};
-        object.$send = function (api_user, api_key, to, toname, subject, text, from)
-   {
-           $scope.method = 'GET';
-           $scope.url = "https://api.sendgrid.com/api/mail.send.json?";
-           $http({method: $scope.method, url: $scope.url  + "api_user=" + api_user + 
-                                                            "&api_key=" + api_key + 
-                                                            "&to=" + to +
-                                                            "&subject=" + subject + 
-                                                            "&text=" + text + 
-                                                            "&from=" + from}).
-           success(function(data, status) {}).
-           error(function(data, status) {});   
-   };
-   }
-   };
-  
-})();
