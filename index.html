@@ -60,11 +60,13 @@ body {
            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
            return re.test(email3);
 } 
-        $scope.addEmail = function(name, email2) {
-            if (validateEmail(email2))
+        $scope.addEmail = function(name, to) {
+            if (validateEmail(to))
             {
-               var newResult = emailList.$add({"name" : name, "email" : email2, "validated" : false}).then(function(ref) {
-               $email.$send(api_user, api_key, email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n", "tyson@onaclovtech.com");
+               var newResult = emailList.$add({"name" : name, "email" : to, "validated" : false}).then(function(ref) {
+               var api_user = "";
+               var api_key = "";
+               $email.$send(api_user, api_key, to, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n", "tyson@onaclovtech.com");
                });
             }
         }
