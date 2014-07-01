@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.6/angular.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/1.0.11/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
+    <script src="sendgrid.js"></script>
    <!-- Latest compiled and minified CSS -->
    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 <style type="text/css">
@@ -49,63 +50,24 @@ body {
        {{id}}
     
  <script>
-      var app = angular.module("myapp", ["firebase"]);
-       app.config(function($httpProvider) {
-    //Enable cross domain calls
-    $httpProvider.defaults.useXDomain = true;
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    $httpProvider.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-    
-});
-      function MyController($scope, $firebase, $http) {
+      var app = angular.module('myapp', ['firebase', 'email']);
+
+      function MyController($scope, $firebase, $email, $http, $log) {
         var FB = ""; // Enter in your FB name
         var ref = new Firebase(FB);
-        $scope.emailList = $firebase(ref.limit(1));
-        validateEmail = function (email) { 
+        var emailList = $firebase(ref);
+        validateEmail = function (email3) { 
            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-           return re.test(email);
+           return re.test(email3);
 } 
-        $scope.addEmail = function(name, email) {
-            if (validateEmail(email))
+        $scope.addEmail = function(name, email2) {
+            if (validateEmail(email2))
             {
-               var newResult = $scope.emailList.$add({"name" : name, "email" : email, "validated" : false}).then(function(ref) {
-  $log.log(ref.name());                // Key name of the added data.
-  Sendgrid.send(email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n");
-});
-               $scope.email = "";
-               $scope.name = "";
-
+               var newResult = emailList.$add({"name" : name, "email" : email2, "validated" : false}).then(function(ref) {
+               $email.$send(api_user, api_key, email, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n", "tyson@onaclovtech.com");
+               });
             }
-         
         }
-        var Sendgrid = {
-         api_user : "", // Enter your Send Grid Username
-         api_key : "",  // Enter your Send Grid Key
-         from : "",
-         send : function(to, toname, subject, text){
-           $scope.method = 'GET';
-           $scope.url = "https://api.sendgrid.com/api/mail.send.json?";
-           $http({method: $scope.method, url: $scope.url  + "api_user=" + this.api_user + 
-                                                            "&api_key=" + this.api_key + 
-                                                            "&to=" + to + 
-                                                            "&subject=" + subject + 
-                                                            "&text=" + text + 
-                                                            "&from=" + from}).
-           success(function(data, status) {
-             $scope.result = "Email Sent";
-             $scope.data = data;
-               $scope.status=status;
-            }).
-            error(function(data, status) {
-               $scope.data = data;
-               $scope.status=status;
-               $scope.result = "Error Sending Email";
-            });
-         }
-     }
-        // Add a router for the result, and bam we're in awesome shape!
-       
-        
       }
       
     </script>
