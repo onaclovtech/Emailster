@@ -16,6 +16,11 @@ and then $email in your controller:
 
      function MyController($scope, $firebase, $email, $http, $log)
      
+Set your API user and Key Variables (I'm hoping this will change in the future):
+ 
+      var api_user = "";
+      var api_key = "";
+
 Finally send an email:
 
      $email.$send(api_user, api_key, to, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n", "tyson@onaclovtech.com");
