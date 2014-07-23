@@ -23,8 +23,9 @@ Set your API user and Key Variables (I'm hoping this will change in the future):
 
 Finally send an email:
 
-     $email.$send(api_user, api_key, to, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n http://onaclovtech.com/apps/rockstar/" + String(ref.name()) + "\n\n", "tyson@onaclovtech.com");
+     $email.$send(api_user, api_key, to, name, "Click to Confirm", "This Please click on this link to confirm your email address: \n\n someURL/" + String(ref.name()) + "\n\n", "somename@somesite.com");
 
+(Then you can write a router to manage when the user opens the site to their unique address)
 
 If you'd like to create a service for another email provider, simply make a pull request, and create a service that contains the send function with the same parameters.
 
